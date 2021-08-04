@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import Square from './Square'
+import Cell from './Cell'
 
 const BoardWrapper = styled.div`
   display: grid;
@@ -11,13 +11,21 @@ const BoardWrapper = styled.div`
 
 const Board = () => {
   const squares = Array(9).fill(0, 0, 9)
+  let [hoveredPosition, setHoveredPosition] = useState<number>();
+
+  const onHover = (position:number) => {
+    setHoveredPosition(position)
+  }
 
   const renderSquares = () => {
+
     return squares.map((_, position) => {
       return (
-        <Square
+        <Cell
           key={position}
           position={position}
+          hoveredPosition={hoveredPosition}
+          onHover={onHover}
         />
       );
     });
