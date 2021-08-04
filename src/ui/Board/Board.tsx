@@ -11,9 +11,9 @@ const BoardWrapper = styled.div`
 
 const Board = () => {
   const squares = Array(9).fill(0, 0, 9)
-  let [hoveredPosition, setHoveredPosition] = useState<number>();
+  let [hoveredPosition, setHoveredPosition] = useState<number | undefined>();
 
-  const onHover = (position:number) => {
+  const onHover = (position:number | undefined) => {
     setHoveredPosition(position)
   }
 

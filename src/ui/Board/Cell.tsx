@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import { PlayerId } from '../../GameLogic/GameLogic'
 import { GameContext } from '../../GameContext'
+import _ from 'lodash'
 
 const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boolean}>`
   display: flex;
@@ -12,13 +13,13 @@ const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boole
   height: 40px;
   border: #eb1478 3px solid;
   cursor: pointer;
-  background-color: ${props => props.shouldHover? "#eb1478" : "default"};
+  background-color: ${props => props.shouldHover? "rgba(235,20,120,0.35)" : "default"};
   :hover {
     background-color: #eb1478;
   }
 `
 
-const Cell: FC<{ position: number, state?: PlayerId | undefined, hoveredPosition:number | undefined, onHover:(position: number) => void }> = (props) => {
+const Cell: FC<{ position: number, state?: PlayerId | undefined, hoveredPosition:number | undefined, onHover:(position?: number) => void }> = (props) => {
   const gameContext = useContext(GameContext)
 
   const onClick = (position: number) => {
@@ -30,10 +31,8 @@ const Cell: FC<{ position: number, state?: PlayerId | undefined, hoveredPosition
     if(isInRow()) {
       return true
     }
-    if(isInCol()) {
-      return true
-    }
-    return false
+    return isInCol();
+
   }
 
   const isInRow = () => {
@@ -58,6 +57,7 @@ const Cell: FC<{ position: number, state?: PlayerId | undefined, hoveredPosition
       shouldHover={shouldHover()}
       state={props.state}
       onMouseEnter={() => { props.onHover(props.position)}}
+      onMouseLeave={() => { props.onHover()}}
       onClick={() => onClick(props.position)}
     />
   )
