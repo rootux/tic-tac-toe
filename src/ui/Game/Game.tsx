@@ -1,5 +1,4 @@
 import Board from "../Board/Board"
-import styled from "styled-components"
 import {useContext} from "react";
 import {GameContext} from "../../GameContext";
 

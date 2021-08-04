@@ -1,9 +1,7 @@
 import React, { useContext, FC } from 'react'
 import styled from 'styled-components'
-
 import { PlayerId } from '../../GameLogic/GameLogic'
 import { GameContext } from '../../GameContext'
-import _ from 'lodash'
 
 const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boolean}>`
   display: flex;
@@ -23,7 +21,7 @@ const Cell: FC<{ position: number, state?: PlayerId | undefined, hoveredPosition
   const gameContext = useContext(GameContext)
 
   const onClick = (position: number) => {
-    gameContext.game!.fillSquare(position)
+    gameContext.game!.fillCell(position)
   }
 
   const shouldHover = () => {
@@ -32,7 +30,6 @@ const Cell: FC<{ position: number, state?: PlayerId | undefined, hoveredPosition
       return true
     }
     return isInCol();
-
   }
 
   const isInRow = () => {

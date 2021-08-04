@@ -1,18 +1,30 @@
-import InvalidMoveError from "../errors/InvalidMoveError";
+import InvalidMoveError from "../errors/InvalidMoveError"
+import axios from "axios"
+import config from "../config/config"
+import _ from "lodash"
+import TicTacToeError from "../errors/TicTacToeError";
+import ServerError from "../errors/ServerError";
 
 export type PlayerId = 'O' | 'X'
-export type GameBoard = Map<any, any>;
+export type GameBoard = string[]
+
+interface ServerResponse {
+  board: string[][]
+  success: boolean
+}
 
 export interface IGame {
-  fillSquare: (position:number) => void
+  fillCell: (position:number) => void
   clearBoard: () => void
 }
 
 class GameLogic implements IGame {
-  private board: GameBoard;
+  private board: GameBoard
+  private totalMoves:number
 
   constructor() {
-    this.board = new Map();
+    this.board = new Array(9).fill('')
+    this.totalMoves = 0
   }
 
   checkInPositions(positions: number[], playerId: PlayerId) {
@@ -21,7 +33,7 @@ class GameLogic implements IGame {
       this.checkPosition(positions[1], playerId) &&
       this.checkPosition(positions[2], playerId)
     ) {
-      return positions;
+      return positions
     }
   }
 
@@ -30,15 +42,15 @@ class GameLogic implements IGame {
       this.checkInPositions([0, 3, 6], playerId) ||
       this.checkInPositions([1, 4, 7], playerId) ||
       this.checkInPositions([2, 5, 8], playerId)
-    );
+    )
   }
 
   checkInDiagonalUpRight(playerId: PlayerId) {
-    return this.checkInPositions([2, 4, 6], playerId);
+    return this.checkInPositions([2, 4, 6], playerId)
   }
 
   checkInDiagonalUpLeft(playerId: PlayerId) {
-    return this.checkInPositions([0, 4, 8], playerId);
+    return this.checkInPositions([0, 4, 8], playerId)
   }
 
   checkInRows(playerId: PlayerId) {
@@ -46,32 +58,55 @@ class GameLogic implements IGame {
       this.checkInPositions([0, 1, 2], playerId) ||
       this.checkInPositions([3, 4, 5], playerId) ||
       this.checkInPositions([6, 7, 8], playerId)
-    );
+    )
   }
 
   checkPosition(position: number, playerId: PlayerId) {
-    return this.board.get(position) === playerId;
+    return this.board[position] === playerId
   }
 
   clearBoard() {
-    this.board.clear();
+    this.board = new Array(9).fill('')
   }
 
-  fillSquare(position: number) {
+  async fillCell(position: number) {
     const currentPlayer = 'X'
-    if (this.board.get(position)) {
+    if (this.board[position]) {
       throw new InvalidMoveError("Position already set")
     }
 
-    if (this.board.size < 9) {
-      this.board.set(position, currentPlayer);
+    if (this.totalMoves < 9) {
+      this.board[position] = currentPlayer
+      this.totalMoves++
     }
+
+    const response = await this.sendBoard()
+    const responseData = response.data as ServerResponse
+    this.updateBoard(responseData)
+  }
+
+  updateBoard(response: ServerResponse) {
+    if(!response.success) {
+      throw new ServerError("Got invalid response", response)
+    }
+    this.board = _.flatten(response.board)
+    this.totalMoves++
+  }
+
+  getFormattedBoard() {
+    return _.chunk(this.board, 3)
+  }
+
+  sendBoard() {
+    return axios.post(`${config.SERVER_URL}/engine`, {
+      board: this.getFormattedBoard()
+    })
   }
 
   checkWinner() {
-    let winner = this.getWinner();
+    let winner = this.getWinner()
 
-    if (winner || this.board.size === 9) {
+    if (winner || this.totalMoves === 9) {
       console.log('Winner is ', winner)
     } else {
       console.log('Waiting for next move')
@@ -92,4 +127,4 @@ class GameLogic implements IGame {
   }
 }
 
-export default GameLogic;
+export default GameLogic
