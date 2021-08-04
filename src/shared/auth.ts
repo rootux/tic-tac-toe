@@ -1,13 +1,24 @@
 import { isEmpty } from 'lodash-es'
+import config from '../config/config'
+import axios from 'axios'
 
-function getAuthUser() {
-    const jwt = window.localStorage.getItem('jwtToken')
-    if (!jwt) return {}
-    return JSON.parse(atob(jwt))
+function getToken() {
+    const jwtToken = window.localStorage.getItem('jwtToken')
+    return jwtToken
 }
 
-
 export function checkAuth() {
-    const authUser = getAuthUser()
-    return (authUser && !isEmpty(authUser))
+    const token = getToken()
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    return !isEmpty(token)
+}
+
+export async function login(email:string) {
+  const req = await axios.post(`${config.SERVER_URL}/auth`, {
+    email,
+  })
+  const {token} = req.data //TODO: check for invalid email
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+  window.localStorage.setItem('jwtToken', token)
+  return req.data
 }

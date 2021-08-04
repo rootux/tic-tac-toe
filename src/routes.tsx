@@ -12,7 +12,7 @@ const NotFound404 = lazy(() => import('./pages/404/404'));
 export const Routes: React.FC = () => {
     return (
         <Switch>
-            <PrivateRoute exact component={Game} path='/game'/>
+            <PrivateRoute component={Game} path='/game'/>
             <PublicRoute restricted={true} component={Signup} path='/signup'/>
             <PublicRoute restricted={false} component={Home} path='/'/>
             <PublicRoute restricted={false} component={NotFound404} path="*"/>

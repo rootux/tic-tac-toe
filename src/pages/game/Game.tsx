@@ -3,7 +3,7 @@ import React from 'react';
 const Game = () => {
   return (
     <div>
-      Sign up
+      The game is on
     </div>
   );
 }
