@@ -38,10 +38,12 @@ const Game = () =>{
         checkWinner('O')
       }
     })()
-  },[state.currentPlayerTurn, checkWinner, state.board, sendBoard])
+  },[state.currentPlayerTurn, checkWinner, state.board, sendBoard, state.totalMoves])
 
   useEffect(() => {
     onTurnUpdate()
+    // Adding onTurn as dependency creates a circular rendering
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.currentPlayerTurn])
 
   const newGame = () => {
