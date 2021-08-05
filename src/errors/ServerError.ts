@@ -1,8 +1,8 @@
-export default class InvalidMoveError extends Error {
+export default class ServerError extends Error {
   private result:any
   constructor(message:string, result: any) {
     super(message);
-    this.name = "InvalidMoveError"
+    this.name = "ServerError"
     this.result = result
   }
 }
