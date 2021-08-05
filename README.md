@@ -17,5 +17,6 @@ I've used a few patterns worth mentioning:
 - Context - Mainly to share fetch so child components would be able to communicate with different parts of the system
 
 # TODO
-Given more time I would add more unit tests
-Given more time I would add Snapshot testing for components
+- Given more time I would add more unit tests
+- Given more time I would add Snapshot testing for components
+- As to AI - I'll probably use Alpha Beta search as suggested here - https://www.pico.net/kb/what-algorithm-for-a-tic-tac-toe-game-can-i-use-to-determine-the-best-move-for-the-ai/
