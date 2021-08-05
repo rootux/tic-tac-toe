@@ -62,8 +62,8 @@ const Game = () =>{
   return(
     <Wrapper>
       <h1>Game board</h1>
-      <GameContext.Provider value={dispatch}>
-        <Board boardState={state.board} loading={loading}/>
+      <GameContext.Provider value={{dispatch: dispatch, state: state}}>
+        <Board boardState={state.board} loading={loading} />
       </GameContext.Provider>
 
       {loading && <Loader/> }
