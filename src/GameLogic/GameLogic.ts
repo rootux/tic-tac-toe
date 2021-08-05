@@ -98,6 +98,7 @@ class GameLogic implements IGame {
   }
 
   sendBoard() {
+    // TODO: on network request set UI to loading
     return axios.post(`${config.SERVER_URL}/engine`, {
       board: this.getFormattedBoard()
     })

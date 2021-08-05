@@ -1,7 +1,7 @@
-import React, {useContext, FC, useState} from 'react'
+import React, {useContext, FC, useState, useEffect, useCallback} from 'react'
 import styled from 'styled-components'
 import { PlayerId } from '../../GameLogic/GameLogic'
-import { GameContext } from '../../GameContext'
+import { GameContext } from '../../contexts/GameContext'
 import X from './x.png'
 import O from './circle.png'
 
@@ -22,25 +22,17 @@ const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boole
   }
 `
 
-const Cell: FC<{ position: number, hoveredPosition:number | undefined, onHover:(position?: number) => void }> = (props) => {
-  const gameContext = useContext(GameContext)
-  const [state, setState] = useState<PlayerId | undefined>()
+const Cell: FC<{ position: number, state: PlayerId | undefined, hoveredPosition:number | undefined, onHover:(position?: number) => void }> =
+  ({state, position, hoveredPosition, ...props}) => {
+  const dispatch:any = useContext(GameContext)
+
+  const [activeSelf, setActiveSelf] = useState(false);
 
   const onClick = (position: number) => {
-    gameContext.game!.fillCell(position)
-    setState('X')
-  }
-
-  const shouldHover = () => {
-    if(props.hoveredPosition === null) return false
-    if(isInRow()) {
-      return true
-    }
-    return isInCol();
+    dispatch({type: 'updateCell', position, player: 'X'})
   }
 
   const isInRow = () => {
-    const { hoveredPosition, position } = props
     if(hoveredPosition == null) return false
     return((position < 3 && hoveredPosition < 3) ||
       (position >= 3 && position < 6 && hoveredPosition >=3 && hoveredPosition < 6 ) ||
@@ -48,21 +40,33 @@ const Cell: FC<{ position: number, hoveredPosition:number | undefined, onHover:(
   }
 
   const isInCol = () => {
-    const { hoveredPosition, position } = props
     if(hoveredPosition == null) return false
     const hovPosCol = hoveredPosition % 3
     const ourCol = position % 3
     return ourCol === hovPosCol
   }
 
+  const shouldHover = useCallback(() => {
+    if(hoveredPosition === null) return false
+    if(isInRow()) {
+      return true
+    }
+    return isInCol();
+  }, [isInRow, isInCol, hoveredPosition])
+
+  useEffect(() => {
+    setActiveSelf(shouldHover())
+  },[hoveredPosition, shouldHover])
+
+
   return (
     <Wrapper
       type="button"
-      shouldHover={shouldHover()}
+      shouldHover={activeSelf}
       state={state}
-      onMouseEnter={() => { props.onHover(props.position)}}
+      onMouseEnter={() => { props.onHover(position)}}
       onMouseLeave={() => { props.onHover()}}
-      onClick={() => onClick(props.position)}
+      onClick={() => onClick(position)}
     />
   )
 }
