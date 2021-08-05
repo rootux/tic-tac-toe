@@ -26,6 +26,9 @@ const Game = () =>{
 
   const onTurnUpdate = useCallback(() => {
     (async function async() {
+
+      if(state.totalMoves === 0) return
+      if(state.totalMoves >= 9) return
       // User just played - send board to game engine
       if (state.currentPlayerTurn === 'O') {
         if (checkWinner('X')) return
@@ -39,7 +42,7 @@ const Game = () =>{
 
   useEffect(() => {
     onTurnUpdate()
-  }, [state.currentPlayerTurn, onTurnUpdate])
+  }, [state.currentPlayerTurn])
 
   const newGame = () => {
     dispatch({type:'INIT'})
