@@ -18,3 +18,4 @@ I've used a few patterns worth mentioning:
 
 # TODO
 Given more time I would add more unit tests
+Given more time I would add Snapshot testing for components
