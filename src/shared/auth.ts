@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash-es'
+import { isEmpty } from 'lodash'
 import config from '../config/config'
 import axios from 'axios'
 
