@@ -1,17 +1,18 @@
-import React, { Suspense } from 'react';
+import React, {Suspense} from 'react';
 import {Route, Redirect, RouteProps} from 'react-router-dom';
-import {checkAuth} from "../../shared/auth";
 
 interface PublicRouteProps extends RouteProps {
-    component: any;
-    restricted: boolean;
+    component: any
+    restricted: boolean
+    authorized: boolean
 }
 
 const PublicRoute = (props: PublicRouteProps) => {
-    const { component: Component, restricted, ...rest } = props;
+    const { component: Component, restricted, authorized, ...rest } = props;
+
     return (
         <Route {...rest} render={props => (
-            checkAuth() && restricted ?
+          authorized && restricted ?
                 <Redirect to="/" />
                 :
                 <Suspense fallback={<div>Loading...</div>}>
