@@ -1,4 +1,4 @@
-export type PlayerId = 'O' | 'X'
+export type PlayerId = 'O' | 'X' | ''
 export type GameBoard = string[]
 
 class GameLogic {
@@ -10,7 +10,7 @@ class GameLogic {
       this.checkInDiagonalUpRight(board, player) ||
       this.checkInDiagonalUpLeft(board, player)
 
-    return isWinner
+    return !!isWinner
   }
 
   static checkInPositions(board: PlayerId[], positions: number[], playerId: PlayerId) {
