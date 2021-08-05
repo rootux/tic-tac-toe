@@ -28,6 +28,7 @@ const Game = () =>{
     (async function async() {
 
       if(state.totalMoves === 0) return
+      // This means game over - no need to send data to game server
       if(state.totalMoves >= 9) return
       // User just played - send board to game engine
       if (state.currentPlayerTurn === 'O') {
@@ -57,7 +58,7 @@ const Game = () =>{
       case 'X':
         return setWinnerText('You win')
       default:
-        if(state.totalMoves >= 9) //TODO
+        if(state.totalMoves >= 9)
           return setWinnerText("Draw")
         else
           return setWinnerText("")
