@@ -16,19 +16,6 @@ const Game = () =>{
   const [loading, sendBoard] = useGameEngine()
   const [winnerText,setWinnerText] = useState<string>()
 
-  useEffect(() => {
-    (async function async() {
-      // User just played - send board to game engine
-      if(state.currentPlayerTurn === 'O') {
-        if(checkWinner('X')) return
-        const newBoard = await sendBoard(state.board)
-        dispatch({type: 'UPDATE_BOARD', board: newBoard})
-      } else {
-        checkWinner('O')
-     }
-    })()
-  }, [state.board])
-
   const checkWinner = useCallback((player) => {
     const winner = GameLogic.checkWinner(state.board, player);
     if (winner) {
@@ -36,6 +23,23 @@ const Game = () =>{
     }
     return winner
   },[state.board])
+
+  const onTurnUpdate = useCallback(() => {
+    (async function async() {
+      // User just played - send board to game engine
+      if (state.currentPlayerTurn === 'O') {
+        if (checkWinner('X')) return
+        const newBoard = await sendBoard(state.board)
+        dispatch({type: 'UPDATE_BOARD', board: newBoard})
+      } else {
+        checkWinner('O')
+      }
+    })()
+  },[state.currentPlayerTurn, checkWinner, state.board, sendBoard])
+
+  useEffect(() => {
+    onTurnUpdate()
+  }, [state.currentPlayerTurn, onTurnUpdate])
 
   const newGame = () => {
     dispatch({type:'INIT'})
@@ -48,9 +52,12 @@ const Game = () =>{
       case 'X':
         return setWinnerText('You win')
       default:
-        return setWinnerText("Draw") //TODO
+        if(state.totalMoves >= 9) //TODO
+          return setWinnerText("Draw")
+        else
+          return setWinnerText("")
     }
-  }, [state.winner])
+  }, [state.winner, state.totalMoves])
 
   return(
     <Wrapper>

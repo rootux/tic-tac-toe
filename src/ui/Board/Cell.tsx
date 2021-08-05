@@ -34,19 +34,19 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, loading: boolean
     }
   }
 
-  const isInRow = () => {
+  const isInRow = useCallback(() => {
     if(hoveredPosition == null) return false
     return((position < 3 && hoveredPosition < 3) ||
       (position >= 3 && position < 6 && hoveredPosition >=3 && hoveredPosition < 6 ) ||
       (position >= 6 && position <= 9 && hoveredPosition >=6 && hoveredPosition <= 9 ))
-  }
+  }, [position, hoveredPosition])
 
-  const isInCol = () => {
+  const isInCol = useCallback(() => {
     if(hoveredPosition == null) return false
     const hovPosCol = hoveredPosition % 3
     const ourCol = position % 3
     return ourCol === hovPosCol
-  }
+  },[position, hoveredPosition])
 
   const shouldHover = useCallback(() => {
     if(hoveredPosition === null) return false
@@ -55,7 +55,7 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, loading: boolean
       return true
     }
     return isInCol();
-  }, [isInRow, isInCol, hoveredPosition])
+  }, [isInRow, isInCol, hoveredPosition, loading])
 
   useEffect(() => {
     setActiveSelf(shouldHover())
