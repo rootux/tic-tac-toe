@@ -5,7 +5,7 @@ import { GameContext } from '../../contexts/GameContext'
 import X from './x.png'
 import O from './circle.png'
 
-const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boolean}>`
+const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boolean, loading: boolean}>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,18 +18,20 @@ const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boole
   background-image: ${props => props.state === 'X' ? "url(" + X + ")" : props.state === 'O' ? "url(" + O + ")" : ''};
   background-color: ${props => props.shouldHover? "rgba(235,20,120,0.35)" : "default"};
   :hover {
-    background-color: #eb1478;
+    background-color: ${props => props.loading || props.state ? 'default' : "#eb1478"
   }
 `
 
-const Cell: FC<{ position: number, state: PlayerId | undefined, hoveredPosition:number | undefined, onHover:(position?: number) => void }> =
-  ({state, position, hoveredPosition, ...props}) => {
+const Cell: FC<{ position: number, state: PlayerId | undefined, loading: boolean, hoveredPosition:number | undefined, onHover:(position?: number) => void }> =
+  ({state, position, loading, hoveredPosition, ...props}) => {
   const dispatch:any = useContext(GameContext)
 
   const [activeSelf, setActiveSelf] = useState(false);
 
   const onClick = (position: number) => {
-    dispatch({type: 'updateCell', position, player: 'X'})
+    if(!loading && !state) {
+      dispatch({type: 'UPDATE_CELL', position, player: 'X'})
+    }
   }
 
   const isInRow = () => {
@@ -48,6 +50,7 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, hoveredPosition:
 
   const shouldHover = useCallback(() => {
     if(hoveredPosition === null) return false
+    if(loading) return false
     if(isInRow()) {
       return true
     }
@@ -58,13 +61,18 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, hoveredPosition:
     setActiveSelf(shouldHover())
   },[hoveredPosition, shouldHover])
 
+  const onHover = useCallback(()=> {
+    if(state) return
+    props.onHover(position)
+  },[position, props, state])
 
   return (
     <Wrapper
       type="button"
       shouldHover={activeSelf}
       state={state}
-      onMouseEnter={() => { props.onHover(position)}}
+      loading={loading}
+      onMouseEnter={onHover}
       onMouseLeave={() => { props.onHover()}}
       onClick={() => onClick(position)}
     />

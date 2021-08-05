@@ -10,7 +10,7 @@ const BoardWrapper = styled.div`
   grid-template-rows: 60px 60px 60px;
 `
 
-const Board = ({boardState}:{boardState: PlayerId[]}) => {
+const Board = ({boardState, loading}:{boardState: PlayerId[], loading: boolean}) => {
   let [hoveredPosition, setHoveredPosition] = useState<number | undefined>();
 
   const onHover = (position:number | undefined) => {
@@ -26,6 +26,7 @@ const Board = ({boardState}:{boardState: PlayerId[]}) => {
           position={position}
           hoveredPosition={hoveredPosition}
           onHover={onHover}
+          loading={loading}
           state={sq}
         />
       );

@@ -1,29 +1,44 @@
 import Board from "../Board/Board"
-import {useContext, useEffect, useReducer} from "react"
+import {useEffect, useReducer} from "react"
 import {gameReducer, initialState} from "../../reducers/game.reducer"
-import { GameContext } from '../../contexts/GameContext';
+import { GameContext } from '../../contexts/GameContext'
+import useGameEngine from "./useGameEngine"
+import Loader from '../Loader/Loader'
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  text-align: center;
+`
 
 const Game = () =>{
   const [state, dispatch] = useReducer(gameReducer, initialState)
+  const [loading, sendBoard] = useGameEngine()
 
   useEffect(() => {
-    console.log("TODO Board updated - send network request")
-    // TODO only check if board changed
-    // apinetwork call -> update board
-  }, [state.board]) //TODO: perhaps only [state]
+    (async function async() {
+      // User just played - send board to game engine
+      if(state.currentPlayerTurn === 'O') {
+        const newBoard = await sendBoard(state.board)
+        dispatch({type: 'UPDATE_BOARD', board: newBoard})
+      }
+    })()
+    console.log("Board updated")
+  }, [state.board])
 
   const newGame = () => {
-    dispatch({type:'init'})
+    dispatch({type:'INIT'})
   }
 
   return(
-    <div>
+    <Wrapper>
+      <h1>Game board</h1>
       <GameContext.Provider value={dispatch}>
-        <Board boardState={state.board}/>
+        <Board boardState={state.board} loading={loading}/>
       </GameContext.Provider>
-      Game board
+
+      {loading && <Loader/> }
       <button onClick={newGame}>New Game</button>
-    </div>
+    </Wrapper>
   )
 }
 
