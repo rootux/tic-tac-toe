@@ -64,7 +64,7 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, loading: boolean
       return true
     }
     return isInCol();
-  }, [isInRow, isInCol, hoveredPosition, loading])
+  }, [isInRow, isInCol, hoveredPosition, loading, isDisabled])
 
   useEffect(() => {
     setActiveSelf(shouldHover())
@@ -73,7 +73,7 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, loading: boolean
   const onHover = useCallback(()=> {
     if(isDisabled) return
     props.onHover(position)
-  },[position, props, state])
+  },[position, props, isDisabled])
 
   return (
     <Wrapper
