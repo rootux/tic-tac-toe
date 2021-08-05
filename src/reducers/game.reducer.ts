@@ -29,7 +29,7 @@ const nextPlayer = (currentPlayerTurn: PlayerId) => {
 export function gameReducer (state:State, action: Action): State {
   switch (action.type) {
     case 'INIT':
-      return {...state, board: new Array(9).fill('') }
+      return {...initialState }
 
     case 'UPDATE_BOARD':
       return {...state, board: action.board!, totalMoves: state.totalMoves + 1,
