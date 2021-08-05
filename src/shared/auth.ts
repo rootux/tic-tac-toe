@@ -9,6 +9,10 @@ function getToken() {
 
 export function checkAuth() {
     const token = getToken()
+    if(isEmpty(token)) {
+      delete axios.defaults.headers.common["Authorization"];
+      return false;
+    }
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     return !isEmpty(token)
 }
