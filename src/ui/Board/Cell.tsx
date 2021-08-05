@@ -1,7 +1,9 @@
-import React, { useContext, FC } from 'react'
+import React, {useContext, FC, useState} from 'react'
 import styled from 'styled-components'
 import { PlayerId } from '../../GameLogic/GameLogic'
 import { GameContext } from '../../GameContext'
+import X from './x.png'
+import O from './circle.png'
 
 const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boolean}>`
   display: flex;
@@ -11,17 +13,22 @@ const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boole
   height: 40px;
   border: #eb1478 3px solid;
   cursor: pointer;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: ${props => props.state === 'X' ? "url(" + X + ")" : props.state === 'O' ? "url(" + O + ")" : ''};
   background-color: ${props => props.shouldHover? "rgba(235,20,120,0.35)" : "default"};
   :hover {
     background-color: #eb1478;
   }
 `
 
-const Cell: FC<{ position: number, state?: PlayerId | undefined, hoveredPosition:number | undefined, onHover:(position?: number) => void }> = (props) => {
+const Cell: FC<{ position: number, hoveredPosition:number | undefined, onHover:(position?: number) => void }> = (props) => {
   const gameContext = useContext(GameContext)
+  const [state, setState] = useState<PlayerId | undefined>()
 
   const onClick = (position: number) => {
     gameContext.game!.fillCell(position)
+    setState('X')
   }
 
   const shouldHover = () => {
@@ -52,7 +59,7 @@ const Cell: FC<{ position: number, state?: PlayerId | undefined, hoveredPosition
     <Wrapper
       type="button"
       shouldHover={shouldHover()}
-      state={props.state}
+      state={state}
       onMouseEnter={() => { props.onHover(props.position)}}
       onMouseLeave={() => { props.onHover()}}
       onClick={() => onClick(props.position)}
