@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import styled from 'styled-components'
 import Cell from './Cell'
+import {PlayerId} from "../../GameLogic/GameLogic";
 
 const BoardWrapper = styled.div`
   display: grid;
@@ -9,8 +10,7 @@ const BoardWrapper = styled.div`
   grid-template-rows: 60px 60px 60px;
 `
 
-const Board = () => {
-  const squares = Array(9).fill(0, 0, 9)
+const Board = ({boardState}:{boardState: PlayerId[]}) => {
   let [hoveredPosition, setHoveredPosition] = useState<number | undefined>();
 
   const onHover = (position:number | undefined) => {
@@ -19,13 +19,14 @@ const Board = () => {
 
   const renderSquares = () => {
 
-    return squares.map((_, position) => {
+    return boardState.map((sq, position) => {
       return (
         <Cell
           key={position}
           position={position}
           hoveredPosition={hoveredPosition}
           onHover={onHover}
+          state={sq}
         />
       );
     });
