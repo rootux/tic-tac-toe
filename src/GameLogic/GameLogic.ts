@@ -1,7 +1,25 @@
 export type PlayerId = 'O' | 'X' | ''
 export type GameBoard = string[]
 
+export enum GameResult {
+  NoWinnerYet,
+  Tie,
+  HumanWon,
+  ComputerWon
+}
+
 class GameLogic {
+
+  static getGameResult(board: PlayerId[]): GameResult {
+    if(this.checkWinner(board, 'O')) {
+      return GameResult.ComputerWon
+    }else if(this.checkWinner(board, 'X')) {
+      return GameResult.HumanWon
+    }else if(this.isGameFinishedInTie(board)) {
+      return GameResult.Tie
+    }
+    return GameResult.NoWinnerYet
+  }
 
   static checkWinner(board: PlayerId[], player: PlayerId) {
     let isWinner =
@@ -11,6 +29,13 @@ class GameLogic {
       this.checkInDiagonalUpLeft(board, player)
 
     return !!isWinner
+  }
+
+  static isGameFinishedInTie(board: PlayerId[]) {
+    for(let i=0;i<board.length;i++) {
+      if(!board[i]) return false
+    }
+    return true
   }
 
   static checkInPositions(board: PlayerId[], positions: number[], playerId: PlayerId) {
@@ -47,7 +72,7 @@ class GameLogic {
     )
   }
 
- static  checkPosition(board: PlayerId[], position: number, playerId: PlayerId) {
+ static checkPosition(board: PlayerId[], position: number, playerId: PlayerId) {
     return board[position] === playerId
   }
 }

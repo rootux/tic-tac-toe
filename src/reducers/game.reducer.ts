@@ -4,6 +4,7 @@ export interface State {
   board: PlayerId[]
   totalMoves: number
   winner: PlayerId | undefined
+  suggestedPosition: number
   currentPlayerTurn: PlayerId | string
 }
 
@@ -17,6 +18,7 @@ export interface Action {
 export const initialState = {
   board: Array(9).fill(''),
   totalMoves: 0,
+  suggestedPosition: -1,
   currentPlayerTurn: 'X',
   winner: undefined,
 };
@@ -44,6 +46,9 @@ export function gameReducer (state:State, action: Action): State {
 
     case 'UPDATE_WINNER':
       return {...state, winner: action.player!}
+
+    case 'SUGGESTED_POSITION':
+      return {...state, suggestedPosition: action.position!}
 
 
     default:

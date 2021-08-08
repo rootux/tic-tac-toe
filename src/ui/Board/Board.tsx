@@ -17,8 +17,7 @@ const Board = ({boardState, loading}:{boardState: PlayerId[], loading: boolean})
     setHoveredPosition(position)
   }
 
-  const renderSquares = () => {
-
+  const renderCells = () => {
     return boardState.map((sq, position) => {
       return (
         <Cell
@@ -30,12 +29,12 @@ const Board = ({boardState, loading}:{boardState: PlayerId[], loading: boolean})
           state={sq}
         />
       );
-    });
+    })
   }
 
   return (
     <BoardWrapper>
-      {renderSquares()}
+      {renderCells()}
     </BoardWrapper>
   )
 }

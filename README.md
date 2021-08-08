@@ -19,4 +19,4 @@ I've used a few patterns worth mentioning:
 # TODO
 - Given more time I would add more unit tests
 - Given more time I would add Snapshot testing for components
-- As to AI - I'll probably use Alpha Beta search as suggested here - https://www.pico.net/kb/what-algorithm-for-a-tic-tac-toe-game-can-i-use-to-determine-the-best-move-for-the-ai/
+- Go over the alpha beta AI to understand why it's defaulting to suggested move 0

@@ -1,4 +1,4 @@
-import GameLogic, {PlayerId} from "./GameLogic";
+import GameLogic, {GameResult, PlayerId} from "./GameLogic";
 
 it('recognizes when someone win in col', () => {
   const board: PlayerId[] = [
@@ -49,5 +49,16 @@ it('recognizes when no one wins', () => {
 
   const isWinner = GameLogic.checkWinner(board, 'O')
   expect(isWinner).toEqual(false);
+})
+
+
+it('recognizes when there is a tie', () => {
+  const board: PlayerId[] = [
+    'O', 'X', 'X',
+    'X', 'X', 'O',
+    'O', 'O', 'X'] as PlayerId[]
+
+  const gameResult = GameLogic.getGameResult(board)
+  expect(gameResult).toEqual(GameResult.Tie);
 })
 

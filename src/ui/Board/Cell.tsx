@@ -5,7 +5,7 @@ import { GameContext } from '../../contexts/GameContext'
 import X from './x.png'
 import O from './circle.png'
 
-const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boolean, isDisabled: boolean}>`
+const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boolean, isDisabled: boolean, isSuggested: boolean}>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,8 +17,11 @@ const Wrapper = styled.button<{ state: PlayerId | undefined , shouldHover: boole
   background-size: cover;
   background-image: ${props => props.state === 'X' ? "url(" + X + ")" : props.state === 'O' ? "url(" + O + ")" : ''};
   background-color: ${props => props.shouldHover? "rgba(235,20,120,0.35)" : "default"};
+  background-color: ${props => props.isSuggested ? "#eb8314": 'default'};
+  
   :hover {
     background-color: ${props => props.isDisabled ? 'default' : "#eb1478"
+  }
   }
 `
 
@@ -26,7 +29,8 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, loading: boolean
   ({state, position, loading, hoveredPosition, ...props}) => {
   const {dispatch, state:gameState} = useContext(GameContext)
   const [isDisabled,setIsDisabled] = useState(false)
-  const [activeSelf, setActiveSelf] = useState(false);
+  const [activeSelf, setActiveSelf] = useState(false)
+  const [isSuggested, setIsSuggested] = useState(false)
 
   useEffect(() => {
     if(gameState.winner || state || loading) {
@@ -36,6 +40,11 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, loading: boolean
     }
   },
   [gameState.winner, state, loading])
+
+    useEffect(() => {
+      const isSuggested = (position === gameState.suggestedPosition)
+      setIsSuggested(isSuggested)
+    },[gameState.suggestedPosition])
 
   const onClick = (position: number) => {
     if(!loading && !state && !gameState.winner) {
@@ -81,6 +90,7 @@ const Cell: FC<{ position: number, state: PlayerId | undefined, loading: boolean
       shouldHover={activeSelf}
       state={state}
       isDisabled={isDisabled}
+      isSuggested={isSuggested}
       onMouseEnter={onHover}
       onMouseLeave={() => { props.onHover()}}
       onClick={() => onClick(position)}

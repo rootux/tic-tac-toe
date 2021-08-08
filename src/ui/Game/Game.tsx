@@ -6,6 +6,7 @@ import useGameEngine from "./useGameEngine"
 import Loader from '../Loader/Loader'
 import styled from "styled-components";
 import GameLogic from "../../GameLogic/GameLogic";
+import alphaBetaMinMax from "../../GameLogic/AlphaBetaMinMax";
 
 const Wrapper = styled.div`
   text-align: center;
@@ -51,6 +52,11 @@ const Game = () =>{
     dispatch({type:'INIT'})
   }
 
+  const suggest = () => {
+    const suggestedPosition = alphaBetaMinMax(state.board)
+    dispatch({type:'SUGGESTED_POSITION', position: suggestedPosition})
+  }
+
   useEffect(() =>{
     switch(state.winner) {
       case 'O':
@@ -75,6 +81,7 @@ const Game = () =>{
       {loading && <Loader/> }
       {winnerText && <div>{winnerText}</div>}
       <button onClick={newGame}>New Game</button>
+      <button onClick={suggest}>Suggest</button>
     </Wrapper>
   )
 }
