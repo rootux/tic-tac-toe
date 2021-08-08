@@ -42,7 +42,7 @@ export function gameReducer (state:State, action: Action): State {
       const newBoard = [...state.board]
       newBoard[action.position] = action.player!
       return {...state, board: newBoard, totalMoves: state.totalMoves + 1,
-        currentPlayerTurn: nextPlayer(action.player!)}
+        currentPlayerTurn: nextPlayer(action.player!),suggestedPosition: -1}
 
     case 'UPDATE_WINNER':
       return {...state, winner: action.player!}
