@@ -4,7 +4,7 @@ import GameLogic, {GameResult, PlayerId} from "./GameLogic";
  * Minimax with Alpha-Beta pruning
  * Read about it here
  * https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/
- * @param board
+ * TODO: An improvement here would be to check which moves yields more win states - this would solve our failed test to predict 2 moves ahead
  */
 const alphaBetaMinMax = (board: PlayerId[]): number => {
   let result = {suggestedMove: 0 }
@@ -19,6 +19,7 @@ const getBestMove = (board: PlayerId[], depth: number, alpha:number, beta:number
     return getScore(gameResult, depth)
   }
   const availableMoves = getAvailableMoves(board)
+  // Players turn
   if (activePlayer === 'X') {
     for (let i = 0; i < availableMoves.length; i++) {
       const move = availableMoves[i];
