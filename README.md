@@ -19,4 +19,4 @@ I've used a few patterns worth mentioning:
 # TODO
 - Given more time I would add more unit tests
 - Given more time I would add Snapshot testing for components
-- Go over the alpha beta AI to understand why it's defaulting to suggested move 0
+- Go over the alpha beta AI to understand why it's defaulting to suggested move 0 and why one of the test that should predict 2 moves ahead fails

@@ -41,3 +41,33 @@ it('Suggest the best move', () => {
   const suggestedMove = alphaBetaMinMax(board)
   expect(suggestedMove).toEqual(8);
 })
+
+it('Suggest the best move - predict 2 moves ahead', () => {
+  const board: PlayerId[] = [
+    'X', '', '',
+    'O', 'X', '',
+    '', '', 'O'] as PlayerId[]
+
+  const suggestedMove = alphaBetaMinMax(board)
+  expect(suggestedMove).toEqual(1);
+})
+
+it('Suggest the best move - predict 2 moves ahead again', () => {
+  const board: PlayerId[] = [
+    '', '', 'O',
+    '', 'X', '',
+    'X', 'O', ''] as PlayerId[]
+
+  const suggestedMove = alphaBetaMinMax(board)
+  expect(suggestedMove).toEqual(3);
+})
+
+it('Suggest a win move', () => {
+  const board: PlayerId[] = [
+    'X', 'O', 'X',
+    '', 'X', 'O',
+    '', '', 'O'] as PlayerId[]
+
+  const suggestedMove = alphaBetaMinMax(board)
+  expect(suggestedMove).toEqual(6);
+})
