@@ -53,7 +53,7 @@ const getBestMove = (board: PlayerId[], depth: number, alpha:number, beta:number
   }
 }
 
-// 10 points if human won - depth which is how long it takes to win
+// 10 points if human won reducing the depth (10-depth) which is how long it takes to win - depth equal turn
 const getScore = (gameResult: GameResult, depth: number):number => {
   switch(gameResult) {
     case GameResult.Tie:
