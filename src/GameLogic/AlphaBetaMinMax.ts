@@ -2,7 +2,9 @@ import GameLogic, {GameResult, PlayerId} from "./GameLogic";
 
 /**
  * Minimax with Alpha-Beta pruning
- * Read about it here
+ * Read about the min-max algorithem here:
+ * https://www.neverstopbuilding.com/blog/minimax
+ * Read about the improvement of alpha-beta pruning here
  * https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/
  * TODO: An improvement here would be to check which moves yields more win states - this would solve our failed test to predict 2 moves ahead
  */
