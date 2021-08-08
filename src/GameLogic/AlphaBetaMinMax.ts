@@ -18,18 +18,17 @@ const getBestMove = (board: PlayerId[], depth: number, alpha:number, beta:number
   if(gameResult !== GameResult.NoWinnerYet) {
     return getScore(gameResult, depth)
   }
-  depth++
   const availableMoves = getAvailableMoves(board)
-  if (activePlayer === 'O') {
+  if (activePlayer === 'X') {
     for (let i = 0; i < availableMoves.length; i++) {
       const move = availableMoves[i];
       const newBoard = [...board]
-      newBoard[move] = 'O'
+      newBoard[move] = 'X'
 
-      const score = getBestMove(newBoard, depth, alpha, beta, 'X', result);
+      const score = getBestMove(newBoard, depth + 1, alpha, beta, 'O', result);
       if (score > alpha) {
         alpha = score;
-        if (depth === 1) // Reached to top
+        if (depth === 0) // Reached to top
           result.suggestedMove = move;
       } else if (alpha >= beta) {
         return alpha;
@@ -40,11 +39,11 @@ const getBestMove = (board: PlayerId[], depth: number, alpha:number, beta:number
     for (let i = 0; i < availableMoves.length; i++) {
       const move = availableMoves[i];
       const newBoard = [...board]
-      newBoard[move] = 'X'
-      const score = getBestMove(newBoard, depth, alpha, beta, 'O', result);
+      newBoard[move] = 'O'
+      const score = getBestMove(newBoard, depth + 1, alpha, beta, 'X', result);
       if (score < beta) {
         beta = score;
-        if (depth === 1)
+        if (depth === 0) // Reached to top
           result.suggestedMove = move
       } else if (beta <= alpha) {
         return beta;
@@ -54,14 +53,15 @@ const getBestMove = (board: PlayerId[], depth: number, alpha:number, beta:number
   }
 }
 
+// 10 points if human won - depth which is how long it takes to win
 const getScore = (gameResult: GameResult, depth: number):number => {
   switch(gameResult) {
     case GameResult.Tie:
       return 0
     case GameResult.HumanWon:
-      return depth - 10
-    case GameResult.ComputerWon:
       return 10 - depth
+    case GameResult.ComputerWon:
+      return depth - 10
   }
   return 0 //TODO: should not get here
 }

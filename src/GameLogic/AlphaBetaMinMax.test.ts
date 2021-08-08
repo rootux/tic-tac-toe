@@ -71,3 +71,13 @@ it('Suggest a win move', () => {
   const suggestedMove = alphaBetaMinMax(board)
   expect(suggestedMove).toEqual(6);
 })
+
+it('Suggest a counter-win move', () => {
+  const board: PlayerId[] = [
+    'O' , 'X' , 'O',
+    'X' , 'O' , 'X',
+    ''  , ''  , 'X'] as PlayerId[]
+
+  const suggestedMove = alphaBetaMinMax(board)
+  expect(suggestedMove).toEqual(6);
+})
