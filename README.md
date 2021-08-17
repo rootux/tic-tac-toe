@@ -1,4 +1,7 @@
 # Tic-Tac-Toe
+A task I was given to prove my react skills.
+Create a Tic-Tac-Toe game.
+Bonus - add suggest button with ai capabilities.
 
 ## Development
 Start the project using `npm start`
@@ -19,4 +22,4 @@ I've used a few patterns worth mentioning:
 # TODO
 - Given more time I would add more unit tests
 - Given more time I would add Snapshot testing for components
-- Go over the alpha beta AI to understand why it's defaulting to suggested move 0 and why one of the test that should predict 2 moves ahead fails
+- Improve the alpha beta AI to understand to predict the move which has more likely to win
